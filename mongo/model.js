@@ -8,11 +8,37 @@ var blogSchema = new Schema({
 	time:String,
 	content:String,
 })
-
+var userSchema = new Schema({
+	username:String,
+	password:String,
+	token:String
+})
 var FlutterModel = mongoose.model('Flutter',blogSchema)
-// var Flutter = new FlutterModel()
+var UserModel = mongoose.model('Users',userSchema)
 
 mongoose.connect(url,{ useNewUrlParser: true,dbName:'flutter'})
+
+class User {
+	constructor(user){
+		this.username = user.name,
+		this.password = user.pwd,
+		this.token = user.token
+	}
+	save(cb){
+		let user = {
+			username:this.username,
+			password:this.password,
+			token:this.token,
+		}
+		new UserModel(user).save(err=>{
+			if(err) {
+				console.error(err);
+			}else{
+				cb && cb()
+			}
+		})
+	}
+}
 
 class Flutter {
 	constructor(article){
@@ -36,4 +62,5 @@ class Flutter {
 		})
 	}
 }
-module.exports = Flutter
+exports.Flutter = Flutter
+exports.User = User
