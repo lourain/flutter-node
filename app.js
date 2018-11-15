@@ -12,10 +12,7 @@ app.use(bodyParser.json())
 
 const secret = '李逸威的fluttering'
 
-// Flutter.save(err=>{
-// 	if (!err) console.log('Success!');
-// })
-
+//登录
 app.post('/login', function (req, res) {
 	res.header('Access-Control-Allow-Origin', '*')
 	res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With')
@@ -38,7 +35,8 @@ app.post('/login', function (req, res) {
 	}
 })
 
-app.post('/publicArticle',function(req,res){
+//发表文章
+app.post('/post',function(req,res){
 	res.header('Access-Control-Allow-Origin', '*')
 	res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With')
 	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
@@ -46,6 +44,18 @@ app.post('/publicArticle',function(req,res){
 	const Flutter = Model.Flutter
 	new Flutter(req.body).save(function(){
 		res.json({msg:'success'})
+	})
+})
+//获取所有文章
+app.get('/articles',(req,res)=>{
+	res.header('Access-Control-Allow-Origin', '*')
+	res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With')
+	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+	const Flutter = Model.Flutter
+	new Flutter().get_all_articles(function(articles){
+		console.log(articles);
+		res.json({"code":0,"data":articles})
+		
 	})
 })
 app.listen(9999)

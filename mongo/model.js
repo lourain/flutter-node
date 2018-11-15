@@ -42,9 +42,11 @@ class User {
 
 class Flutter {
 	constructor(article){
-		this.title = article.title
-		this.tags = article.tags
-		this.content = article.content
+		if(article){
+			this.title = article.title
+			this.tags = article.tags
+			this.content = article.content
+		}
 	}
 	save(cb){
 		let art = {
@@ -59,6 +61,16 @@ class Flutter {
 			}else{
 				cb && cb()
 			}
+		})
+	}
+	get_all_articles(cb){
+		FlutterModel.find({},function(err,res){
+			if(err){
+				console.error(err);
+			}else{
+				cb && cb(res)
+			}
+			
 		})
 	}
 }
