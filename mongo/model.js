@@ -63,8 +63,8 @@ class Flutter {
 			}
 		})
 	}
-	get_condition(condition,cb){
-		FlutterModel.find(condition,function(err,res){
+	get_condition(condition,project,cb){
+		FlutterModel.find(condition,project,function(err,res){
 			if(err){
 				console.error(err);
 			}else{

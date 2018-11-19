@@ -53,24 +53,24 @@ app.post('/post',function(req,res){
 	})
 })
 //获取所有文章
-app.get('/articles',(req,res)=>{
+app.get('/titles',(req,res)=>{
 	res.header('Access-Control-Allow-Origin', '*')
 	res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With')
 	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
 	const Flutter = Model.Flutter
-	new Flutter().get_condition({},function(articles){
-		res.json({"code":0,"data":articles})
+	new Flutter().get_condition({},{title:1},function(titles){
+		res.json({"code":0,"data":titles})
 		
 	})
 })
 //获取一篇文章详情
-app.get('/detail/:id',(req,res)=>{
+app.get('/article',(req,res)=>{
 	res.header('Access-Control-Allow-Origin', '*')
 	res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With')
 	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
 	const Flutter = Model.Flutter
-	console.log(req.params);
-	
-	// new Flutter().getOne(req.)
+	new Flutter().get_condition({_id:req.query.id},null,function(article){
+		res.json({"code":0,"data":article})
+	})
 })
 app.listen(9999)
