@@ -63,8 +63,8 @@ class Flutter {
 			}
 		})
 	}
-	get_all_articles(cb){
-		FlutterModel.find({},function(err,res){
+	get_condition(condition,cb){
+		FlutterModel.find(condition,function(err,res){
 			if(err){
 				console.error(err);
 			}else{

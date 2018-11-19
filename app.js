@@ -58,7 +58,7 @@ app.get('/articles',(req,res)=>{
 	res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With')
 	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
 	const Flutter = Model.Flutter
-	new Flutter().get_all_articles(function(articles){
+	new Flutter().get_condition({},function(articles){
 		res.json({"code":0,"data":articles})
 		
 	})
