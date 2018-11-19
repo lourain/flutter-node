@@ -73,6 +73,16 @@ class Flutter {
 			
 		})
 	}
+	getOne(id,cb){
+		FlutterModel.findById({id:id},function(err,res){
+			if(err){
+				console.error(err);
+			}else{
+				cb && cb()
+			}
+		})
+	}
+
 }
 exports.Flutter = Flutter
 exports.User = User

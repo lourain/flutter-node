@@ -17,7 +17,6 @@ app.post('/login', function (req, res) {
 	res.header('Access-Control-Allow-Origin', '*')
 	res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With')
 	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-	console.log(req.body);
 	let username = req.body.name
 	let pwd = req.body.pwd
 	if (username === 'admin' && pwd === '123') {
@@ -60,9 +59,18 @@ app.get('/articles',(req,res)=>{
 	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
 	const Flutter = Model.Flutter
 	new Flutter().get_all_articles(function(articles){
-		console.log(articles);
 		res.json({"code":0,"data":articles})
 		
 	})
+})
+//获取一篇文章详情
+app.get('/detail/:id',(req,res)=>{
+	res.header('Access-Control-Allow-Origin', '*')
+	res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With')
+	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+	const Flutter = Model.Flutter
+	console.log(req.params);
+	
+	// new Flutter().getOne(req.)
 })
 app.listen(9999)
