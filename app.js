@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
 const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 var bodyParser = require('body-parser')
@@ -9,14 +10,12 @@ var Model = require('./mongo/model.js')
 app.use(express.static(__dirname + '/dist'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(cors())
 
 const secret = '李逸威的fluttering'
 
 //登录
 app.post('/login', function (req, res) {
-	res.header('Access-Control-Allow-Origin', '*')
-	res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With')
-	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
 	let username = req.body.name
 	let pwd = req.body.pwd
 	if (username === 'admin' && pwd === '123') {
@@ -36,9 +35,6 @@ app.post('/login', function (req, res) {
 
 //发表文章
 app.post('/post',function(req,res){
-	res.header('Access-Control-Allow-Origin', '*')
-	res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With')
-	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
 	let params = req.body
 	params.tags.filter(tags=>tags)
 	let vals = Object.values(params)
@@ -54,9 +50,6 @@ app.post('/post',function(req,res){
 })
 //获取所有文章
 app.get('/titles',(req,res)=>{
-	res.header('Access-Control-Allow-Origin', '*')
-	res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With')
-	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
 	const Flutter = Model.Flutter
 	new Flutter().get_condition({},{title:1},function(titles){
 		res.json({"code":0,"data":titles})
@@ -65,9 +58,6 @@ app.get('/titles',(req,res)=>{
 })
 //获取一篇文章详情
 app.get('/article',(req,res)=>{
-	res.header('Access-Control-Allow-Origin', '*')
-	res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With')
-	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
 	const Flutter = Model.Flutter
 	new Flutter().get_condition({_id:req.query.id},null,function(article){
 		res.json({"code":0,"data":article})
