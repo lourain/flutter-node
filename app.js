@@ -32,12 +32,25 @@ app.post('/login', function (req, res) {
 		res.json({ msg: 'error' })
 	}
 })
-
+//编辑文章
+app.get('/edit',(req,res)=>{
+    res.header('Access-Control-Allow-Origin', '*')
+	res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With')
+    res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS")
+    const Flutter =  Model.Flutter
+    console.log(req.query);
+    
+    new Flutter().get_condition({_id:req.query.id},{__v:0},data=>{
+        res.json({"code":0,"data":data[0]})
+    })
+})
 //发表文章
 app.post('/post',function(req,res){
 	let params = req.body
 	params.tags.filter(tags=>tags)
-	let vals = Object.values(params)
+    let vals = Object.values(params)
+    console.log(params);
+    
 	let isEmpty = !vals.every(val=> val)
 	if(isEmpty){
 		return res.json({"code":100,msg:"输入不能为空"})
