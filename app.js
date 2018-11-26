@@ -34,9 +34,6 @@ app.post('/login', function (req, res) {
 })
 //编辑文章
 app.get('/edit',(req,res)=>{
-    res.header('Access-Control-Allow-Origin', '*')
-	res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With')
-    res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS")
     const Flutter =  Model.Flutter
     console.log(req.query);
     
