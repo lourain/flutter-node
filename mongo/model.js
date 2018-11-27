@@ -87,7 +87,16 @@ class Flutter {
 			if(err){
 				console.error(err)
 			}else{
-				cb && cb()
+				cb && cb(res)
+			}
+		})
+	}
+	delete(id,cb) {
+		FlutterModel.findByIdAndDelete(id,(err,res)=>{
+			if(err){
+				cb(err)
+			}else{
+				cb && cb("删除成功")
 			}
 		})
 	}

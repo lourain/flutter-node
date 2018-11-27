@@ -5,7 +5,8 @@ const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 var bodyParser = require('body-parser')
 var Model = require('./mongo/model.js')
-
+const Flutter =  Model.Flutter
+const User = Model.User
 
 app.use(express.static(__dirname + '/dist'))
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -24,7 +25,6 @@ app.post('/login', function (req, res) {
 		//签发token
 		const token = jwt.sign(payload,secret)
 		payload['token'] = token
-		const User = Model.User
 		new User(payload).save(function(){
 			res.json({ msg: 'success',token:token })
 		})
@@ -34,14 +34,19 @@ app.post('/login', function (req, res) {
 })
 //编辑文章
 app.get('/edit',(req,res)=>{
-    const Flutter =  Model.Flutter
     new Flutter().get_condition({_id:req.query.id},{__v:0},data=>{
         res.json({"code":0,"data":data[0]})
     })
 })
+//删除文章
+app.delete('/del/:id',(req,res)=>{
+	let id = req.params.id
+	new Flutter().delete(id,function(data){
+		res.json({"code":0,"msg":data})
+	})
+})
 //发表文章
 app.post('/post',function(req,res){
-	const Flutter = Model.Flutter
 	let params = req.body
 	let _id = params._id
 	delete params._id
@@ -66,7 +71,6 @@ app.post('/post',function(req,res){
 })
 //获取所有文章
 app.get('/titles',(req,res)=>{
-	const Flutter = Model.Flutter
 	new Flutter().get_condition({},{title:1},function(titles){
 		res.json({"code":0,"data":titles})
 		
@@ -74,7 +78,6 @@ app.get('/titles',(req,res)=>{
 })
 //获取一篇文章详情
 app.get('/article',(req,res)=>{
-	const Flutter = Model.Flutter
 	new Flutter().get_condition({_id:req.query.id},null,function(article){
 		res.json({"code":0,"data":article})
 	})
