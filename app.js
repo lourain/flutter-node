@@ -35,28 +35,34 @@ app.post('/login', function (req, res) {
 //编辑文章
 app.get('/edit',(req,res)=>{
     const Flutter =  Model.Flutter
-    console.log(req.query);
-    
     new Flutter().get_condition({_id:req.query.id},{__v:0},data=>{
         res.json({"code":0,"data":data[0]})
     })
 })
 //发表文章
 app.post('/post',function(req,res){
-	let params = req.body
-	params.tags.filter(tags=>tags)
-    let vals = Object.values(params)
-    console.log(params);
-    
-	let isEmpty = !vals.every(val=> val)
-	if(isEmpty){
-		return res.json({"code":100,msg:"输入不能为空"})
-	}
-
 	const Flutter = Model.Flutter
-	new Flutter(req.body).save(function(){
-		res.json({msg:'success'})
-	})
+	let params = req.body
+	let _id = params._id
+	delete params._id
+	if(_id){//如果有_id号就是edit
+		new Flutter().update(_id,params,function(){
+			res.json({"code":0,"msg":"success"})
+		})
+	}else{//如果没有_id号就是post
+		params.tags.filter(tags=>tags)
+		let vals = Object.values(params)
+		console.log(params);
+		
+		let isEmpty = !vals.every(val=> val)
+		if(isEmpty){
+			return res.json({"code":100,msg:"输入不能为空"})
+		}
+	
+		new Flutter(req.body).save(function(){
+			res.json({msg:'success'})
+		})
+	}
 })
 //获取所有文章
 app.get('/titles',(req,res)=>{

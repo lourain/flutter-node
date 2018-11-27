@@ -74,9 +74,18 @@ class Flutter {
 		})
 	}
 	getOne(id,cb){
-		FlutterModel.findById({id:id},function(err,res){
+		FlutterModel.findById(id,function(err,res){
 			if(err){
 				console.error(err);
+			}else{
+				cb && cb()
+			}
+		})
+	}
+	update(id,data,cb){
+		FlutterModel.findByIdAndUpdate(id,data,(err,res)=>{
+			if(err){
+				console.error(err)
 			}else{
 				cb && cb()
 			}
