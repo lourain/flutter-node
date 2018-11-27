@@ -3,8 +3,10 @@ const app = express()
 const cors = require('cors')
 const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
-var bodyParser = require('body-parser')
-var Model = require('./mongo/model.js')
+const bodyParser = require('body-parser')
+const Model = require('./mongo/model.js')
+const multer = require('multer')
+const upload = multer({dest:'uploads/'})
 const Flutter =  Model.Flutter
 const User = Model.User
 
@@ -81,5 +83,12 @@ app.get('/article',(req,res)=>{
 	new Flutter().get_condition({_id:req.query.id},null,function(article){
 		res.json({"code":0,"data":article})
 	})
+})
+//上传图片
+app.post('/upload',upload.any(),(req,res)=>{
+	let pic = req.file
+	console.log(req);
+	
+	res.json({"code":0})
 })
 app.listen(9999)
