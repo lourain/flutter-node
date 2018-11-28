@@ -87,8 +87,6 @@ app.get('/article',(req,res)=>{
 //上传图片
 app.post('/upload',upload.any(),(req,res)=>{
 	let pic = req.files
-	console.log(pic);
-	
 	res.json({"code":0,"msg":"上传成功"})
 })
 app.listen(9999)
