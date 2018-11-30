@@ -10,7 +10,18 @@ const multer = require('multer')
 
 app.set('secret', '李逸威的fluttering')
 
-const jwtAuth = expressJwt({ secret: '李逸威的fluttering' }).unless({ path: ['/login',]})
+const jwtAuth = expressJwt({
+	secret: '李逸威的fluttering',
+	getToken: function (req) {
+		if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+			return req.headers.authorization.split(' ')[1];
+		} else if (req.query && req.query.token) {
+			return req.query.token;
+		}
+		return req.headers.authorization
+	},
+	maxAge:60*5,//5min过期时间
+}).unless({ path: ['/login',] })
 const upload = multer({ dest: 'uploads/' })
 const Flutter = Model.Flutter
 const User = Model.User
@@ -23,12 +34,15 @@ app.use(cors())
 app.use(jwtAuth)
 
 app.use(function (err, req, res, next) {
-	if (err.name === 'UnauthorizedError') {
-	  res.json({"code":1111,"msg":"无效token，请重新登录！！"});
-	}else{
+	if (err.name === 'UnauthorizedError') {//token失效
+		console.error(err);
+		res.json({ "code": 1111, "msg": "无效token，请重新登录！！" });
+	} else {
+		console.log(req);
+		
 		next()
 	}
-  });
+});
 //登录
 app.post('/login', function (req, res) {
 	let username = req.body.name
@@ -47,10 +61,10 @@ app.post('/login', function (req, res) {
 		let payload = req.body
 		let secret = app.get('secret')
 		//签发token
-		const token = jwt.sign(payload, secret, { expiresIn: '1h' })
+		const token = jwt.sign(payload, secret,{expiresIn:60*5})
 		payload['token'] = token
 		new User(payload).save(function () {
-			res.json({ "code": 0, "msg": '授权成功', "token": 'Bearer ' + token })
+			res.json({ "code": 0, "msg": '授权成功', "token": token })
 		})
 
 
@@ -58,7 +72,7 @@ app.post('/login', function (req, res) {
 })
 //编辑文章
 app.get('/edit', (req, res) => {
-	if(req.query.id){
+	if (req.query.id) {
 		new Flutter().get_condition({ _id: req.query.id }, { __v: 0 }, data => {
 			res.json({ "code": 0, "data": data[0] })
 		})
@@ -90,7 +104,7 @@ app.post('/post', function (req, res) {
 			return res.json({ "code": 100, msg: "输入不能为空" })
 		}
 		console.log(req.body);
-		
+
 		new Flutter(req.body).save(function () {
 			res.json({ msg: 'success' })
 		})
@@ -99,6 +113,15 @@ app.post('/post', function (req, res) {
 //获取所有文章
 app.get('/titles', (req, res) => {
 	new Flutter().get_condition({}, { title: 1 }, function (titles) {
+		jwt.verify(req.headers.authorization,app.get('secret'),{maxAge:60},function(err,decoded){
+			if(err){
+				console.error(err);
+			}else{
+				console.log(decoded);
+
+			}
+		})
+		console.log(req.user)
 		res.json({ "code": 0, "data": titles })
 
 	})
