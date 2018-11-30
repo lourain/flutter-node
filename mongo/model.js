@@ -20,9 +20,11 @@ mongoose.connect(url,{ useNewUrlParser: true,dbName:'flutter'})
 
 class User {
 	constructor(user){
-		this.username = user.name,
-		this.password = user.pwd,
-		this.token = user.token
+		if(user){
+			this.username = user.name,
+			this.password = user.pwd,
+			this.token = user.token
+		}
 	}
 	save(cb){
 		let user = {
@@ -35,6 +37,16 @@ class User {
 				console.error(err);
 			}else{
 				cb && cb()
+			}
+		})
+	}
+	find(username,cb) {
+		UserModel.findOne({username:username},(err,res)=>{
+			if(err){
+				console.error(err);
+
+			}else{
+				cb(res)
 			}
 		})
 	}
