@@ -35,7 +35,9 @@ app.use(jwtAuth)
 
 app.use(function (err, req, res, next) {
 	req.headers['Expect'] = '100-continue'
-	if (err.name === 'UnauthorizedError') {//token失效
+    if (err.name === 'UnauthorizedError') {//token失效
+        console.error(err);
+        
 		res.status(401).json({ "code": 1111, "msg": "无效token，请重新登录！！" });
 	} else {
 
