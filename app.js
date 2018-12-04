@@ -21,7 +21,7 @@ const jwtAuth = expressJwt({
 		return req.headers.authorization
 	},
 	maxAge:60*5,//5min过期时间
-}).unless({ path: ['/login',] })
+}).unless({ path: ['/login'] })
 const upload = multer({ dest: 'uploads/' })
 const Flutter = Model.Flutter
 const User = Model.User
@@ -34,12 +34,11 @@ app.use(cors())
 app.use(jwtAuth)
 
 app.use(function (err, req, res, next) {
+	req.headers['Expect'] = '100-continue'
 	if (err.name === 'UnauthorizedError') {//token失效
-		console.error(err);
-		res.json({ "code": 1111, "msg": "无效token，请重新登录！！" });
+		res.status(401).json({ "code": 1111, "msg": "无效token，请重新登录！！" });
 	} else {
-		console.log(req);
-		
+
 		next()
 	}
 });
@@ -113,15 +112,15 @@ app.post('/post', function (req, res) {
 //获取所有文章
 app.get('/titles', (req, res) => {
 	new Flutter().get_condition({}, { title: 1 }, function (titles) {
-		jwt.verify(req.headers.authorization,app.get('secret'),{maxAge:60},function(err,decoded){
-			if(err){
-				console.error(err);
-			}else{
-				console.log(decoded);
+		// jwt.verify(req.headers.authorization,app.get('secret'),{maxAge:60},function(err,decoded){
+		// 	if(err){
+		// 		console.error(err);
+		// 	}else{
+		// 		console.log(decoded);
 
-			}
-		})
-		console.log(req.user)
+		// 	}
+		// })
+
 		res.json({ "code": 0, "data": titles })
 
 	})
@@ -135,7 +134,6 @@ app.get('/article', (req, res) => {
 //上传图片
 app.post('/upload', upload.any(), (req, res) => {
 	let pic = req.files
-	console.log(pic);
 
 	res.json({ "code": 0, "msg": "上传成功" })
 })
