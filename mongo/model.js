@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 const url = 'mongodb://122.152.219.175:27017'
+mongoose.connect(url,{ useNewUrlParser: true,dbName:'flutter'})
+
 var blogSchema = new Schema({
 	title:String,
 	tags:Array,
@@ -13,10 +15,14 @@ var userSchema = new Schema({
 	password:String,
 	token:String
 })
+var picSchema = new Schema({
+    name:String,
+    introduce:String,
+    url:String
+})
 var FlutterModel = mongoose.model('Flutter',blogSchema)
 var UserModel = mongoose.model('Users',userSchema)
-
-mongoose.connect(url,{ useNewUrlParser: true,dbName:'flutter'})
+var PicModel = mongoose.model('Pics',picSchema)
 
 class User {
 	constructor(user){
@@ -51,7 +57,30 @@ class User {
 		})
 	}
 }
+class Pic {
+    constructor(pic){
+        this.name = pic.name,
+        this.introduce = pic.introduce,
+        this.url = pic.url
+    }
+    save(cb){
+        let pic = {
+            name:this.name,
+            introduce:this.introduce,
+            url:this.url,
+			time:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()<10?0+new Date().getMinutes():new Date().getMinutes()}:${new Date().getSeconds()}`
 
+        }
+        new PicModel(pic).save(err=>{
+            if(err){
+                console.error(err);
+            }else{
+                cb && cb()
+            }
+        })
+    }
+
+}
 class Flutter {
 	constructor(article){
 		if(article){
@@ -65,7 +94,7 @@ class Flutter {
 			title:this.title,
 			tags:this.tags,
 			content:this.content,
-			time:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`
+			time:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()<10?0+new Date().getMinutes():new Date().getMinutes()}:${new Date().getSeconds()}`
 		}
 		new FlutterModel(art).save(err=>{
 			if(err) {
@@ -114,5 +143,7 @@ class Flutter {
 	}
 
 }
+
 exports.Flutter = Flutter
 exports.User = User
+exports.Pic = Pic

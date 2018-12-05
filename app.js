@@ -21,11 +21,12 @@ const jwtAuth = expressJwt({
 		}
 		return req.headers.authorization
 	},
-	maxAge:60*20,//20min过期时间
+	maxAge:60*60,//20min过期时间
 }).unless({ path: ['/login'] })
 const upload = multer({ dest: 'uploads/' })
 const Flutter = Model.Flutter
 const User = Model.User
+const Pic = Model.Pic
 
 
 app.use(express.static(__dirname + '/uploads'))
@@ -63,7 +64,7 @@ app.post('/login', function (req, res) {
 		let payload = req.body
 		let secret = app.get('secret')
 		//签发token
-		const token = jwt.sign(payload, secret,{expiresIn:60*20})
+		const token = jwt.sign(payload, secret,{expiresIn:60*60})
 		payload['token'] = token
 		new User(payload).save(function () {
 			res.json({ "code": 0, "msg": '授权成功', "token": token })
@@ -130,6 +131,7 @@ app.post('/upload', upload.any(), (req, res) => {
     pics.forEach(pic => {
         fs.rename(`./uploads/${pic.filename}`,`./uploads/${pic.originalname}`,err=>{
             if(err) console.error(err);
+            new Pic({name:pic.originalname,introduce:'',url:'/'+pic.originalname}).save()
         })
     });
 	res.json({ "code": 0, "msg": "上传成功" })
