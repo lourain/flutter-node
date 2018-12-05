@@ -1,4 +1,5 @@
 const express = require('express')
+const fs = require('fs')
 const app = express()
 const cors = require('cors')
 const crypto = require('crypto')
@@ -20,14 +21,14 @@ const jwtAuth = expressJwt({
 		}
 		return req.headers.authorization
 	},
-	maxAge:60*5,//5min过期时间
+	maxAge:60*20,//20min过期时间
 }).unless({ path: ['/login'] })
 const upload = multer({ dest: 'uploads/' })
 const Flutter = Model.Flutter
 const User = Model.User
 
 
-app.use(express.static(__dirname + '/dist'))
+app.use(express.static(__dirname + '/uploads'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cors())
@@ -62,7 +63,7 @@ app.post('/login', function (req, res) {
 		let payload = req.body
 		let secret = app.get('secret')
 		//签发token
-		const token = jwt.sign(payload, secret,{expiresIn:60*5})
+		const token = jwt.sign(payload, secret,{expiresIn:60*20})
 		payload['token'] = token
 		new User(payload).save(function () {
 			res.json({ "code": 0, "msg": '授权成功', "token": token })
@@ -104,8 +105,6 @@ app.post('/post', function (req, res) {
 		if (isEmpty) {
 			return res.json({ "code": 100, msg: "输入不能为空" })
 		}
-		console.log(req.body);
-
 		new Flutter(req.body).save(function () {
 			res.json({ msg: 'success' })
 		})
@@ -114,14 +113,6 @@ app.post('/post', function (req, res) {
 //获取所有文章
 app.get('/titles', (req, res) => {
 	new Flutter().get_condition({}, { title: 1 }, function (titles) {
-		// jwt.verify(req.headers.authorization,app.get('secret'),{maxAge:60},function(err,decoded){
-		// 	if(err){
-		// 		console.error(err);
-		// 	}else{
-		// 		console.log(decoded);
-
-		// 	}
-		// })
 
 		res.json({ "code": 0, "data": titles })
 
@@ -135,8 +126,12 @@ app.get('/article', (req, res) => {
 })
 //上传图片
 app.post('/upload', upload.any(), (req, res) => {
-	let pic = req.files
-
+	let pics= req.files
+    pics.forEach(pic => {
+        fs.rename(`./uploads/${pic.filename}`,`./uploads/${pic.originalname}`,err=>{
+            if(err) console.error(err);
+        })
+    });
 	res.json({ "code": 0, "msg": "上传成功" })
 })
 app.listen(9999) 
