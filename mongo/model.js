@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 const url = 'mongodb://122.152.219.175:27017'
-mongoose.connect(url,{ useNewUrlParser: true,dbName:'flutter'})
+mongoose.connect(url,{ useNewUrlParser: true,dbName:'flutter',poolSize:20})
 
 var blogSchema = new Schema({
 	title:String,

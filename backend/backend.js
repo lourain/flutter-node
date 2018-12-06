@@ -2,14 +2,16 @@ const express = require('express')
 const fs = require('fs')
 const app = express()
 const cors = require('cors')
-const crypto = require('crypto')
-const jwt = require('jsonwebtoken')
+
 const expressJwt = require('express-jwt')
 const bodyParser = require('body-parser')
-const Model = require('./mongo/model.js')
+const Model = require('../mongo/model.js')
 const multer = require('multer')
 
-app.set('secret', '李逸威的fluttering')
+
+const loginRouter = require('./route/login')
+
+// app.set('secret', '李逸威的fluttering')
 
 const jwtAuth = expressJwt({
 	secret: '李逸威的fluttering',
@@ -45,33 +47,10 @@ app.use(function (err, req, res, next) {
 		next()
 	}
 });
+
+app.use('/login',loginRouter)
 //登录
-app.post('/login', function (req, res) {
-	let username = req.body.name
-	let pwd = req.body.pwd
-	new User().find(username, function (data) {
-		const USER = data && data.username
-		const PWD = data && data.password
-		if (!USER) {
-			return res.json({ "code": 1001, "msg": "没有此用户" })
-		}
-		if (PWD !== pwd) {
-			return res.json({ "code": 1002, "msg": "密码错误" })
-		}
 
-		//token数据
-		let payload = req.body
-		let secret = app.get('secret')
-		//签发token
-		const token = jwt.sign(payload, secret,{expiresIn:60*60})
-		payload['token'] = token
-		new User(payload).save(function () {
-			res.json({ "code": 0, "msg": '授权成功', "token": token })
-		})
-
-
-	})
-})
 //编辑文章
 app.get('/edit', (req, res) => {
 	if (req.query.id) {
