@@ -17,6 +17,7 @@ const uploadRouter = require('./route/backend_route/upload')
 const articleRouter = require('./route/backend_route/article')
 
 const detailRouter = require('./route/frontend_route/detail')
+const directoryRouter = require('./route/frontend_route/directory')
 
 
 const jwtAuth = expressJwt({
@@ -69,6 +70,8 @@ app.use('/upload',uploadRouter)
 
 
 //前端blog接口
+//目录
+app.use('/directory',directoryRouter)
 //详情
 app.use('/detail',detailRouter)
 

@@ -59,15 +59,13 @@ class User {
 }
 class Pic {
     constructor(pic){
-        this.name = pic.name,
-        this.introduce = pic.introduce,
-        this.url = pic.url
+        this.album_name = pic.album_name,
+        this.urls = pic.urls
     }
     save(cb){
         let pic = {
-            name:this.name,
-            introduce:this.introduce,
-            url:this.url,
+            album_name:this.album_name,
+            urls:this.urls,
 			time:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()<10?0+new Date().getMinutes():new Date().getMinutes()}:${new Date().getSeconds()}`
 
         }
@@ -78,6 +76,16 @@ class Pic {
                 cb && cb()
             }
         })
+    }
+    get(conditions,cb){
+        PicModel.find(conditions,{album_name:1})
+            .exec(function(err,albums){
+                if(err){
+                    console.error(err);
+                }else{
+                    cb && cb(albums)
+                }
+            })
     }
 
 }
