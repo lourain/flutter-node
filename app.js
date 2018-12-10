@@ -14,6 +14,7 @@ const deleteRouter = require('./route/backend_route/delete')
 const postRouter = require('./route/backend_route/post')
 const titlesRouter = require('./route/backend_route/titles')
 const uploadRouter = require('./route/backend_route/upload')
+const albumsRouter = require('./route/backend_route/albums')
 const articleRouter = require('./route/backend_route/article')
 
 const detailRouter = require('./route/frontend_route/detail')
@@ -67,6 +68,8 @@ app.use('/titles',titlesRouter)
 app.use('/article',articleRouter)
 //上传图片
 app.use('/upload',uploadRouter)
+//相册
+app.use('/albums',albumsRouter)
 
 
 //前端blog接口
