@@ -1,3 +1,4 @@
+'use strict';
 const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
@@ -162,7 +163,6 @@ class Flutter {
     }
 
 }
-
 exports.Flutter = Flutter
 exports.User = User
 exports.Pic = Pic
