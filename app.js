@@ -20,6 +20,7 @@ const articleRouter = require('./route/backend_route/article')
 
 const detailRouter = require('./route/frontend_route/detail')
 const directoryRouter = require('./route/frontend_route/directory')
+const ablumRouter = require('./route/frontend_route/ablum')
 
 
 const jwtAuth = expressJwt({
@@ -33,7 +34,7 @@ const jwtAuth = expressJwt({
 		return req.headers.authorization
 	},
 	maxAge:60*60,//60min过期时间
-}).unless({ path: ['/login','/detail','/directory'] })
+}).unless({ path: ['/login','/detail','/directory','/ablum'] })
 
 
 
@@ -78,7 +79,8 @@ app.use('/albums',albumsRouter)
 app.use('/directory',directoryRouter)
 //详情
 app.use('/detail',detailRouter)
-
+//前端相册
+app.use('/ablum',ablumRouter)
 app.listen(9999,()=>{
     console.log('backend is running at port 9999');
     

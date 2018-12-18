@@ -7,7 +7,8 @@ let getFlutter = function(){
     return new Promise((resolve,resject)=>{
         new Flutter().get_condition({},{title:1},function(titles){
             let o = {}
-            o.item_name = '游记'
+            o.item_name = '记录'
+            o.path = '/detail'
             o.list = titles
             resolve(o)
         })
@@ -22,7 +23,8 @@ let getPic = function(){
                 delete pic['album_name']
             });
             let o = {}
-            o.item_name = '照片'
+            o.item_name = '相册'
+            o.path = '/ablum'
             o.list = pics
             console.log(o);
             
