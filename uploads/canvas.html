@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+    <style>
+        canvas{
+            /* width: 800px;
+            height: 400px; */
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <img src="http://localhost:9999/IMG_20181001_160320.jpg" alt="" id="source" >
+    <canvas id="canvas"></canvas>
+    <a href="" download="canvas">xi阿仔</a>
+    <input type="file" onchange="test" id="file">
+</body>
+<script>
+    var canvas = document.getElementById('canvas')
+    var ctx = canvas.getContext("2d")
+    var image = document.getElementById("source")
+    image.onload = function(){
+        let targetwidth = canvas.width = this.width
+        let targetheight = canvas.height = this.height
+        let maxWidth,maxHeight = 600
+        console.log(this.width,this.height);
+
+        if(this.width/this.height !== maxWidth/maxHeight){
+            targetheight = canvas.height = maxHeight
+            targetwidth = canvas.width = Math.round((this.width/this.height)*targetheight)
+        }
+        ctx.drawImage(image,0,0,targetwidth,targetheight)
+
+        document.querySelector('a').href = canvas.toDataURL('image/webp')
+        console.log(canvas.toDataURL());
+        canvas.toBlob(function(blob){
+            console.log(blob);
+            
+        })
+    }
+    
+    
+    document.getElementById('file').onchange = function(e){
+        var reader =  new FileReader()
+        reader.onload = function(e){
+            console.log(e.target.result);
+            
+        }
+        reader.readAsDataURL(e.target.files[0])
+    }
+</script>
+</html>
