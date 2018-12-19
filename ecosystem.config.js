@@ -23,7 +23,7 @@ module.exports = {
       host : '122.152.219.175',
       ref  : 'origin/master',
       repo : 'https://github.com/lourain/flutter-node.git',
-      path : '/root/fluttering',
+      path : '/root/fluttering/flutter-node',
       'post-deploy' : 'npm install && pm2 reload ecosystem.config.js --env production'
     }
   }
