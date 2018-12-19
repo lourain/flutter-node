@@ -60,30 +60,30 @@ app.use(function (err, req, res, next) {
 
 //后台管理系统
 //登录
-app.use('/login',loginRouter)
+app.use('/api/login',loginRouter)
 //编辑文章
-app.use('/edit',editRouter)
+app.use('/api/edit',editRouter)
 //删除文章
-app.use('/del',deleteRouter)
+app.use('/api/del',deleteRouter)
 //发表文章
-app.use('/post',postRouter)
+app.use('/api/post',postRouter)
 //获取所有文章
-app.use('/titles',titlesRouter)
+app.use('/api/titles',titlesRouter)
 //获取一篇文章详情
-app.use('/article',articleRouter)
+app.use('/api/article',articleRouter)
 //上传图片
-app.use('/upload',uploadRouter)
+app.use('/api/upload',uploadRouter)
 //相册
-app.use('/albums',albumsRouter)
+app.use('/api/albums',albumsRouter)
 
 
 //前端blog接口
 //目录
-app.use('/directory',directoryRouter)
+app.use('/api/directory',directoryRouter)
 //详情
-app.use('/detail',detailRouter)
+app.use('/api/detail',detailRouter)
 //前端相册
-app.use('/ablum',ablumRouter)
+app.use('/api/ablum',ablumRouter)
 app.listen(9999,()=>{
     console.log('backend is running at port 9999');
     
