@@ -24,7 +24,7 @@ module.exports = {
       ref  : 'origin/master',
       repo : 'https://github.com/lourain/flutter-node.git',
       path : '/root/fluttering/flutter-node',
-      'post-deploy' : 'npm install && pm2 reload ecosystem.config.js --env production'
+      'post-deploy' : 'npm install && git pull && pm2 reload ecosystem.config.js --env production'
     }
   }
 };
