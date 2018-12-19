@@ -45,7 +45,7 @@ app.use(express.static(__dirname + '/uploads'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cors())
-// app.use(jwtAuth)
+app.use(jwtAuth)
 
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {//token失效
