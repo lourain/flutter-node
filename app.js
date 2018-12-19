@@ -6,9 +6,10 @@ const cors = require('cors')
 
 process.env.PORT = 9999
 
+const logger = require('morgan')
 const expressJwt = require('express-jwt')
 const bodyParser = require('body-parser')
-const Model = require('./mongo/model.js')
+
 
 //引入路由
 const loginRouter = require('./route/backend_route/login')
@@ -36,18 +37,19 @@ const jwtAuth = expressJwt({
 		return req.headers.authorization
 	},
 	maxAge:60*60,//60min过期时间
-}).unless({ path: ['/api/login','/api/detail','/api/directory','/api/ablum'] })
+}).unless({ path: ['/login','/detail','/directory','/ablum'] })
 
 
 
-
+app.use(logger('dev'))
 app.use(express.static(__dirname + '/uploads'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cors())
-// app.use(jwtAuth)
+app.use(jwtAuth)
 
 app.use(function (err, req, res, next) {
+
     if (err.name === 'UnauthorizedError') {//token失效
         console.error(err);
         
@@ -60,30 +62,30 @@ app.use(function (err, req, res, next) {
 
 //后台管理系统
 //登录
-app.use('/api/login',loginRouter)
+app.use('/login',loginRouter)
 //编辑文章
-app.use('/api/edit',editRouter)
+app.use('/edit',editRouter)
 //删除文章
-app.use('/api/del',deleteRouter)
+app.use('/del',deleteRouter)
 //发表文章
-app.use('/api/post',postRouter)
+app.use('/post',postRouter)
 //获取所有文章
-app.use('/api/titles',titlesRouter)
+app.use('/titles',titlesRouter)
 //获取一篇文章详情
-app.use('/api/article',articleRouter)
+app.use('/article',articleRouter)
 //上传图片
-app.use('/api/upload',uploadRouter)
+app.use('/upload',uploadRouter)
 //相册
-app.use('/api/albums',albumsRouter)
+app.use('/albums',albumsRouter)
 
 
 //前端blog接口
 //目录
-app.use('/api/directory',directoryRouter)
+app.use('/directory',directoryRouter)
 //详情
-app.use('/api/detail',detailRouter)
+app.use('/detail',detailRouter)
 //前端相册
-app.use('/api/ablum',ablumRouter)
+app.use('/ablum',ablumRouter)
 app.listen(9999,()=>{
     console.log('backend is running at port 9999');
     
