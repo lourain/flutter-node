@@ -4,6 +4,8 @@ const fs = require('fs')
 const app = express()
 const cors = require('cors')
 
+process.env.PORT = 9999
+
 const expressJwt = require('express-jwt')
 const bodyParser = require('body-parser')
 const Model = require('./mongo/model.js')
@@ -35,6 +37,7 @@ const jwtAuth = expressJwt({
 	},
 	maxAge:60*60,//60min过期时间
 }).unless({ path: ['/login','/detail','/directory','/ablum'] })
+
 
 
 
