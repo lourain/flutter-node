@@ -49,7 +49,6 @@ app.use(cors())
 app.use(jwtAuth)
 
 app.use(function (err, req, res, next) {
-
     if (err.name === 'UnauthorizedError') {//token失效
         console.error(err);
         

@@ -7,6 +7,7 @@
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.3.11",
     "morgan": "^1.9.1",
-    "multer": "^1.4.1"
+    "multer": "^1.4.1",
+    "tinify": "^1.6.0-beta.2"
   }
 }
