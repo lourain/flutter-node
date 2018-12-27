@@ -37,7 +37,7 @@ const jwtAuth = expressJwt({
         return req.headers.authorization
     },
     maxAge: 60 * 60,//60min过期时间
-}).unless({ path: ['/login' ,'/detail','/api/directory', '/api/ablum','/directory', '/ablum'] })
+}).unless({ path: ['/login' ,'/detail','/api/directory', '/api/ablum','/api/detail','/directory', '/ablum','/detail'] })
 
 
 
