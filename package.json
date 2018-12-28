@@ -4,12 +4,12 @@
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "express-jwt": "^5.3.1",
+    "fontmin": "^0.9.7-beta",
     "http-proxy-middleware": "^0.19.1",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.3.11",
     "morgan": "^1.9.1",
     "multer": "^1.4.1",
-    "tinify": "^1.6.0-beta.2",
-    "youziku": "^8.0.0"
+    "tinify": "^1.6.0-beta.2"
   }
 }

@@ -2,13 +2,27 @@
 const express = require('express')
 const router = express.Router()
 const { Flutter, Pic } = require('../../mongo/model')
-var youziku = require("youziku");
-var youzikuClient = new youziku.youzikuClient("8d4498b1eeb0afb4b2a230aca5bfb102"); //apikey
-var cdata = {
-    Datas: []
-};
+var Fontmin = require('fontmin');
+
+var srcPath = 'fonts/lixuke.ttf'; // 字体源文件
+var destPath = 'uploads';    // 输出路径
+// var text = [我说你是人间的四月天；笑响点亮了四面风；轻灵在春的光艳中交舞着变。];
 var chinese = ['风满楼']
 
+// 初始化
+// var fontmin = new Fontmin()
+//     .src(srcPath)               // 输入配置
+//     .use(Fontmin.glyph({        // 字型提取插件
+//         text: chinese              // 所需文字
+//     }))
+//     .use(Fontmin.ttf2eot())     // eot 转换插件
+//     .use(Fontmin.ttf2woff())    // woff 转换插件     
+//     .use(Fontmin.ttf2svg())     // svg 转换插件
+//     .use(Fontmin.css())         // css 生成插件
+//     .dest(destPath);            // 输出配置
+
+
+//---------
 
 let getFlutter = function () {
     return new Promise((resolve, resject) => {
@@ -47,14 +61,34 @@ router.get('/', async function (req, res) {
     let data = []
     data.push(article, pics)
     // console.log(pics);
-    
+
     let arr = JSON.stringify(data).match(/[A-Za-z0-9]*[\u4e00-\u9fa5]+[A-Za-z0-9]*/g)
-    chinese = [chinese,...arr].join('')
-    cdata.Datas.push({ AccessKey: '7316cbf0e0dc4648bf4c89f5522534b0', Content: chinese, Url: 'youziku/test1' });
-    youzikuClient.createBatchWoffWebFontAsync(cdata, function (result) {//发送 有字库 我用到的字
-        console.log(result);
-    })
-    
+    chinese = [chinese, ...arr].join('')
+
+    // 初始化
+    var fontmin = new Fontmin()
+        .src(srcPath)               // 输入配置
+        .use(Fontmin.glyph({        // 字型提取插件
+            text: chinese              // 所需文字
+        }))
+        .use(Fontmin.ttf2eot())     // eot 转换插件
+        .use(Fontmin.ttf2woff())    // woff 转换插件     
+        .use(Fontmin.ttf2svg())     // svg 转换插件
+        .use(Fontmin.css())         // css 生成插件
+        .dest(destPath);            // 输出配置
+
+
+    // 执行
+    fontmin.run(function (err, files, stream) {
+
+        if (err) {                  // 异常捕捉
+            console.error(err);
+        }
+        console.log(files);
+
+        console.log('done');        // 成功
+    });
+
     res.json({ "code": 0, data: data })
 
 })
