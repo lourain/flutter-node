@@ -42,11 +42,11 @@ const jwtAuth = expressJwt({
 
 
 app.use(logger('dev'))
+app.use(cors())
 app.use(express.static(__dirname + '/uploads'))
 // app.use(express.static('./flutter'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-app.use(cors())
 
 app.use(jwtAuth)
 
