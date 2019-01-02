@@ -39,10 +39,19 @@ const jwtAuth = expressJwt({
     maxAge: 60 * 60,//60min过期时间
 }).unless({ path: ['/login' ,'/detail','/api/directory', '/api/ablum','/api/detail','/directory', '/ablum','/detail'] })
 
-
+const whitelist = ['http://www.fluttering.cn', 'http://fluttering.cn']
+var corsOptions = {
+    origin: function (origin, callback) {
+      if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true)
+      } else {
+        callback(new Error('Not allowed by CORS'))
+      }
+    }
+  }
 
 app.use(logger('dev'))
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(express.static(__dirname + '/uploads'))
 // app.use(express.static('./flutter'))
 app.use(bodyParser.urlencoded({ extended: false }))
