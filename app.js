@@ -37,17 +37,10 @@ const jwtAuth = expressJwt({
         return req.headers.authorization
     },
     maxAge: 60 * 60,//60min过期时间
-}).unless({ path: ['/login' ,'/detail','/api/directory', '/api/ablum','/api/detail','/directory', '/ablum','/detail'] })
-
-const whitelist = ['http://www.fluttering.cn', 'http://fluttering.cn']
+}).unless({ path: ['/login' ,'/detail','/api/directory', '/api/ablum','/api/detail','/directory','/ablum','/detail'] })
+const whitelist = ['http://www.fluttering.cn', 'http://fluttering.cn','http://localhost:8080','http://localhost:9999']
 var corsOptions = {
-    origin: function (origin, callback) {
-      if (whitelist.indexOf(origin) !== -1) {
-        callback(null, true)
-      } else {
-        callback(new Error('Not allowed by CORS'))
-      }
-    }
+    origin:whitelist
   }
 
 app.use(logger('dev'))
@@ -63,8 +56,9 @@ app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {//token失效
         console.error(err);
         res.status(401).json({ "code": 1111, "msg": "无效token，请重新登录！！" });
+    }else if(err){
+        res.status(404).json({"code":404,"msg":err.name})
     } else {
-
         next()
     }
 });
