@@ -1,10 +1,10 @@
 module.exports = {
   apps : [{
     name: 'flutter-node',
-    script: 'app.js',
+    script: 'node',
 
     // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
-    // args: 'one two',
+    args: 'app.js',
     // instances: 1,
     autorestart: true,
     watch: true,
