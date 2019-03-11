@@ -23,9 +23,10 @@ router.post('/',function(req,res){
 
 		//token数据
 		let payload = req.body
-		let secret = app.get('secret')
+        let secret = app.get('secret')
+        console.log(secret);
 		//签发token
-		const token = jwt.sign(payload, secret,{expiresIn:60*60})
+		const token = jwt.sign(payload,'李逸威的fluttering',{expiresIn:60*60*72})
 		payload['token'] = token
 		new User(payload).save(function () {
 			res.json({ "code": 0, "msg": '授权成功', "token": token })
