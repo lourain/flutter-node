@@ -22,7 +22,7 @@ router.post('/',function(req,res){
 		}
 
 		//token数据
-		let payload = req.body
+		let payload = {}
         let secret = app.get('secret')
         console.log(secret);
 		//签发token
