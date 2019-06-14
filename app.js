@@ -38,7 +38,7 @@ const jwtAuth = expressJwt({
     },
     maxAge: 60*60*72,//3day过期时间
 }).unless({ path: ['/login' ,'/detail','/api/directory', '/api/ablum','/api/detail','/directory','/ablum','/detail'] })
-const whitelist = ['http://www.fluttering.cn', 'http://fluttering.cn','http://localhost:8080','http://localhost:9999']
+const whitelist = ['http://www.fluttering.cn', 'http://fluttering.cn','http://localhost:8080','http://localhost:9999','http://backend.fluttering.cn']
 var corsOptions = {
     origin:whitelist
   }
